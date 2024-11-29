@@ -1,0 +1,10 @@
+{
+  "PSG": {
+    "roleID": "",
+    "imageURL": "https://example.com/psg_logo.png"
+  },
+  "Real Madrid": {
+    "roleID": "1275093298356420831",
+    "imageURL": "https://i.imgur.com/pJJ7PEc.png"
+  }
+}
