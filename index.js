@@ -151,15 +151,14 @@ client.on('interactionCreate', async interaction => {
     await interaction.editReply({ content: `Offer sent to ${signee.tag}.` });
   }
 
-  // Handle accepting the offer button
-  // Handle accepting the offer button
+ 
+// Handle accepting the offer button
 if (interaction.isButton() && interaction.customId === 'accept_offer') {
   await interaction.deferUpdate();
 
   const originalEmbed = interaction.message.embeds[0];
   if (!originalEmbed) return;
 
-  const contractIDField = originalEmbed.fields.find(f => f.name === '🆔 Contract ID');
   const teamFieldMatch = originalEmbed.description.match(/\*\*(.+)\*\*/);
   const teamName = teamFieldMatch ? teamFieldMatch[1] : null;
 
@@ -185,17 +184,31 @@ if (interaction.isButton() && interaction.customId === 'accept_offer') {
 
   await transactionChannel.send({ embeds: [transactionEmbed] });
 
-  // Fetch the member and assign the team role
   const signeeMember = await guild.members.fetch(interaction.user.id);
-  const teamRoleData = Object.entries(teams).find(([name, data]) => name === teamName);
-  
-  if (teamRoleData) {
-    const [, teamData] = teamRoleData;
-    const teamRole = guild.roles.cache.get(teamData.roleID);
-    if (teamRole) {
-      await signeeMember.roles.add(teamRole);
-    }
+
+  // Find the manager's team role based on the `teams` data
+  const managerRoleID = Object.values(teams).find(team =>
+    member.roles.cache.has(team.roleID)
+  )?.roleID;
+
+  if (!managerRoleID) {
+    return interaction.followUp({
+      content: '⚠️ Manager does not have an associated team role.',
+      ephemeral: true,
+    });
   }
+
+  // Fetch the role object from the guild
+  const teamRole = guild.roles.cache.get(managerRoleID);
+  if (!teamRole) {
+    return interaction.followUp({
+      content: '⚠️ Could not find the corresponding team role in the guild.',
+      ephemeral: true,
+    });
+  }
+
+  // Assign the role to the signee
+  await signeeMember.roles.add(teamRole);
 
   await interaction.message.edit({ embeds: [transactionEmbed], components: [] });
 
@@ -204,7 +217,6 @@ if (interaction.isButton() && interaction.customId === 'accept_offer') {
     ephemeral: false,
   });
 }
-
 
   // Handle /view command
   if (commandName === 'view') {
