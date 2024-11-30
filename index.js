@@ -152,41 +152,59 @@ client.on('interactionCreate', async interaction => {
   }
 
   // Handle accepting the offer button
-  if (interaction.isButton() && interaction.customId === 'accept_offer') {
-    await interaction.deferUpdate();
+  // Handle accepting the offer button
+if (interaction.isButton() && interaction.customId === 'accept_offer') {
+  await interaction.deferUpdate();
 
-    const originalEmbed = interaction.message.embeds[0];
-    if (!originalEmbed) return;
+  const originalEmbed = interaction.message.embeds[0];
+  if (!originalEmbed) return;
 
-    const contractIDField = originalEmbed.fields.find(f => f.name === '🆔 Contract ID');
-    const teamField = originalEmbed.description.match(/\*\*(.+)\*\*/)?.[1];
+  const contractIDField = originalEmbed.fields.find(f => f.name === '🆔 Contract ID');
+  const teamFieldMatch = originalEmbed.description.match(/\*\*(.+)\*\*/);
+  const teamName = teamFieldMatch ? teamFieldMatch[1] : null;
 
-    const transactionChannel = client.channels.cache.get(process.env.TRANSACTION_CHANNEL_ID);
-    if (!transactionChannel) {
-      console.error("Transaction channel not found. Check TRANSACTION_CHANNEL_ID in your .env file.");
-      return interaction.followUp({
-        content: '⚠️ Error: Transaction channel not found.',
-        ephemeral: true,
-      });
-    }
-
-    const transactionEmbed = EmbedBuilder.from(originalEmbed)
-      .setTitle('🎉 Contract Signed 🎉')
-      .setFooter({ text: `Accepted by ${interaction.user.tag}` });
-
-    await transactionChannel.send({ embeds: [transactionEmbed] });
-
-    const signeeMember = await guild.members.fetch(interaction.user.id);
-    const teamRole = guild.roles.cache.find(role => role.name === teamField);
-    if (teamRole) await signeeMember.roles.add(teamRole);
-
-    await interaction.message.edit({ embeds: [transactionEmbed], components: [] });
-
-    await interaction.followUp({
-      content: `🎉 ${interaction.user.tag} has accepted the contract offer!`,
-      ephemeral: false,
+  if (!teamName) {
+    return interaction.followUp({
+      content: '⚠️ Error: Could not determine the team from the offer.',
+      ephemeral: true,
     });
   }
+
+  const transactionChannel = client.channels.cache.get(process.env.TRANSACTION_CHANNEL_ID);
+  if (!transactionChannel) {
+    console.error("Transaction channel not found. Check TRANSACTION_CHANNEL_ID in your .env file.");
+    return interaction.followUp({
+      content: '⚠️ Error: Transaction channel not found.',
+      ephemeral: true,
+    });
+  }
+
+  const transactionEmbed = EmbedBuilder.from(originalEmbed)
+    .setTitle('🎉 Contract Signed 🎉')
+    .setFooter({ text: `Accepted by ${interaction.user.tag}` });
+
+  await transactionChannel.send({ embeds: [transactionEmbed] });
+
+  // Fetch the member and assign the team role
+  const signeeMember = await guild.members.fetch(interaction.user.id);
+  const teamRoleData = Object.entries(teams).find(([name, data]) => name === teamName);
+  
+  if (teamRoleData) {
+    const [, teamData] = teamRoleData;
+    const teamRole = guild.roles.cache.get(teamData.roleID);
+    if (teamRole) {
+      await signeeMember.roles.add(teamRole);
+    }
+  }
+
+  await interaction.message.edit({ embeds: [transactionEmbed], components: [] });
+
+  await interaction.followUp({
+    content: `🎉 ${interaction.user.tag} has accepted the contract offer and has been assigned to **${teamName}**!`,
+    ephemeral: false,
+  });
+}
+
 
   // Handle /view command
   if (commandName === 'view') {
