@@ -185,35 +185,28 @@ if (interaction.isButton() && interaction.customId === 'accept_offer') {
   await transactionChannel.send({ embeds: [transactionEmbed] });
 
   const signeeMember = await guild.members.fetch(interaction.user.id);
+  const managerId = originalEmbed.fields.find(field => field.name === 'Contractor').value.match(/\d+/)[0];
+  const managerMember = await guild.members.fetch(managerId);
 
-  // Find the manager's team role based on the `teams` data
-  const managerRoleID = Object.values(teams).find(team =>
-    member.roles.cache.has(team.roleID)
-  )?.roleID;
+  // Check manager's roles for a match in the teams object
+  const managerTeamRole = managerMember.roles.cache.find(role => {
+    return Object.values(teams).some(team => team.roleID === role.id);
+  });
 
-  if (!managerRoleID) {
+  if (!managerTeamRole) {
     return interaction.followUp({
-      content: '⚠️ Manager does not have an associated team role.',
+      content: '⚠️ Error: The manager does not have a valid team role.',
       ephemeral: true,
     });
   }
 
-  // Fetch the role object from the guild
-  const teamRole = guild.roles.cache.get(managerRoleID);
-  if (!teamRole) {
-    return interaction.followUp({
-      content: '⚠️ Could not find the corresponding team role in the guild.',
-      ephemeral: true,
-    });
-  }
-
-  // Assign the role to the signee
-  await signeeMember.roles.add(teamRole);
+  // Assign the same team role to the signee
+  await signeeMember.roles.add(managerTeamRole);
 
   await interaction.message.edit({ embeds: [transactionEmbed], components: [] });
 
   await interaction.followUp({
-    content: `🎉 ${interaction.user.tag} has accepted the contract offer and has been assigned to **${teamName}**!`,
+    content: `🎉 ${interaction.user.tag} has accepted the contract offer and has been assigned to **${managerTeamRole.name}**!`,
     ephemeral: false,
   });
 }
