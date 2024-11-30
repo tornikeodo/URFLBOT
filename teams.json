@@ -1,10 +1,98 @@
 {
-  "PSG": {
-    "roleID": "",
-    "imageURL": "https://example.com/psg_logo.png"
+  "Portugal": {
+    "roleID": "1264252664959602699",
+    "imageURL": "https://imgur.com/a/eXINZS2"
   },
-  "Real Madrid": {
-    "roleID": "1275093298356420831",
-    "imageURL": "https://i.imgur.com/pJJ7PEc.png"
+  "South Korea": {
+    "roleID": "1310364596011536474",
+    "imageURL": "https://imgur.com/a/ye6sNX0"
+  },
+  "Islamic Republic Of Iran": {
+    "roleID": "1311754512410742836",
+    "imageURL": "https://imgur.com/a/AyegsjJ"
+  },
+  "Vatican City": {
+    "roleID": "1264252662271180974",
+    "imageURL": "https://imgur.com/a/QP3rW05"
+  },
+  "Argentina": {
+    "roleID": "1310364786927730778",
+    "imageURL": "https://imgur.com/a/P1V5lf8"
+  },
+  "Brazil": {
+    "roleID": "1264252443118534710",
+    "imageURL": "https://imgur.com/a/NUJXjns"
+  },
+  "Canada": {
+    "roleID": "1310977912043995257",
+    "imageURL": "https://imgur.com/a/fudk1fG"
+  },
+  "Die Mannschaft": {
+    "roleID": "1264244562290020434",
+    "imageURL": "https://imgur.com/a/vEjrP1E"
+  },
+  "Egypt": {
+    "roleID": "1310364496207810600",
+    "imageURL": "https://imgur.com/a/bcnWDPl"
+  },
+  "Nigeria": {
+    "roleID": "1279921859340533864",
+    "imageURL": "https://imgur.com/a/81jn5Rv"
+  },
+  "France": {
+    "roleID": "1264252659376849060",
+    "imageURL": "https://imgur.com/a/XCzk3z2"
+  },
+  "Ghana": {
+    "roleID": "1264252668449132635",
+    "imageURL": "https://imgur.com/a/QRQEx6Y"
+  },
+  "Greece": {
+    "roleID": "1275090659870638141",
+    "imageURL": "https://imgur.com/a/wXXa0hT"
+  },
+  "Japan": {
+    "roleID": "1310364601552211989",
+    "imageURL": "https://imgur.com/a/wH9Sohm"
+  },
+  "Italy": {
+    "roleID": "1264252976759836714",
+    "imageURL": "https://imgur.com/a/fPhn9fH"
+  },
+  "Mexico": {
+    "roleID": "1264252653177671793",
+    "imageURL": "https://imgur.com/a/1C6Rsqd"
+  },
+  "Netherlands": {
+    "roleID": "1275090673309061141",
+    "imageURL": "https://imgur.com/a/dK0pNMV"
+  },
+  "Romania": {
+    "roleID": "1264242077768880238",
+    "imageURL": "https://imgur.com/a/NNJRIiA"
+  },
+  "Morocco": {
+    "roleID": "1311754232583426088",
+    "imageURL": "https://imgur.com/a/LRWwAMO"
+  },
+  "Saudi Arabia": {
+    "roleID": "1311754427673346048",
+    "imageURL": "https://imgur.com/a/QCeWnZN"
+  },
+  "Senegal": {
+    "roleID": "1311754317749026866",
+    "imageURL": "https://imgur.com/a/vfjAZuP"
+  },
+  "Spain": {
+    "roleID": "1264252671767089193",
+    "imageURL": "https://imgur.com/a/PoViWOO"
+  },
+  "United States": {
+    "roleID": "1264252674581332010",
+    "imageURL": "https://imgur.com/a/vBVfUyW"
+  },
+  "Uruguay": {
+    "roleID": "1275090669085655071",
+    "imageURL": "https://imgur.com/a/jVYCl95"
   }
 }
