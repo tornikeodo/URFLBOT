@@ -188,25 +188,31 @@ if (interaction.isButton() && interaction.customId === 'accept_offer') {
   const managerId = originalEmbed.fields.find(field => field.name === 'Contractor').value.match(/\d+/)[0];
   const managerMember = await guild.members.fetch(managerId);
 
-  // Check manager's roles for a match in the teams object
-  const managerTeamRole = managerMember.roles.cache.find(role => {
-    return Object.values(teams).some(team => team.roleID === role.id);
-  });
+  // Retrieve the manager's team name from the embed description
+  const teamRoleID = teams[teamName]?.roleID;
 
-  if (!managerTeamRole) {
+  if (!teamRoleID) {
     return interaction.followUp({
-      content: '⚠️ Error: The manager does not have a valid team role.',
+      content: '⚠️ Error: Team role not found in the teams list.',
       ephemeral: true,
     });
   }
 
-  // Assign the same team role to the signee
-  await signeeMember.roles.add(managerTeamRole);
+  // Assign the team role to the signee
+  const teamRole = guild.roles.cache.get(teamRoleID);
+  if (!teamRole) {
+    return interaction.followUp({
+      content: '⚠️ Error: Could not find the team role in the server.',
+      ephemeral: true,
+    });
+  }
+
+  await signeeMember.roles.add(teamRole);
 
   await interaction.message.edit({ embeds: [transactionEmbed], components: [] });
 
   await interaction.followUp({
-    content: `🎉 ${interaction.user.tag} has accepted the contract offer and has been assigned to **${managerTeamRole.name}**!`,
+    content: `🎉 ${interaction.user.tag} has accepted the contract offer and has been assigned to **${teamName}**!`,
     ephemeral: false,
   });
 }
